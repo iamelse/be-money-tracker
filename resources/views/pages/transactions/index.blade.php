@@ -72,6 +72,7 @@
                         <table class="w-full table-auto">
                             <thead>
                                 <tr class="bg-gray-2 text-left dark:bg-meta-4">
+                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                     <th class="min-w-[180px] px-4 py-4 font-medium text-black dark:text-white">Transaction Date</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account Brand</th>
@@ -84,6 +85,23 @@
                             <tbody>
                                 @forelse ($transactions as $transaction)
                                     <tr>
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <div class="flex items-center space-x-3.5">
+                                                <!-- Edit Item Link -->
+                                                <a href="{{ route('web.app.transactions.edit', $transaction) }}" class="hover:text-primary">
+                                                    <i class='bx bx-edit'></i>
+                                                </a>
+                                                
+                                                <!-- Delete Item -->
+                                                <form action="{{ route('web.app.transactions.destroy', $transaction->id) }}" method="POST" id="delete-form-{{ $transaction->id }}" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="hover:text-primary" onclick="confirmDelete({{ $transaction->id }})">
+                                                        <i class='bx bx-trash'></i> <!-- Delete icon -->
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('F j, Y') }}</p>
                                         </td>                                        
@@ -102,23 +120,6 @@
                                         
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ $transaction->description }}</p>
-                                        </td>
-                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <div class="flex items-center space-x-3.5">
-                                                <!-- Edit Item Link -->
-                                                <a href="{{ route('web.app.transactions.edit', $transaction) }}" class="hover:text-primary">
-                                                    <i class='bx bx-edit'></i>
-                                                </a>
-                                                
-                                                <!-- Delete Item -->
-                                                <form action="{{ route('web.app.transactions.destroy', $transaction->id) }}" method="POST" id="delete-form-{{ $transaction->id }}" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="hover:text-primary" onclick="confirmDelete({{ $transaction->id }})">
-                                                        <i class='bx bx-trash'></i> <!-- Delete icon -->
-                                                    </button>
-                                                </form>
-                                            </div>
                                         </td>
                                     </tr>
                                 @empty

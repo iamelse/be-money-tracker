@@ -74,28 +74,16 @@
                         <table class="w-full table-auto">
                             <thead>
                                 <tr class="bg-gray-2 text-left dark:bg-meta-4">
+                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account Name</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Brand</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Balance</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Type</th>
-                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($accounts as $account)
-                                    <tr>                             
-                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">{{ $account->account_name }}</p>
-                                        </td>
-                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">{{ $account->brand }}</p>
-                                        </td>
-                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">Rp {{ number_format($account->calculate_balance(), 0, ',', '.') }}</p>
-                                        </td>                                        
-                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">{{ $account->account_type }}</p>
-                                        </td>
+                                    <tr>          
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <div class="flex items-center space-x-3.5">
                                                 <!-- Edit Item -->
@@ -112,6 +100,18 @@
                                                     </button>
                                                 </form>
                                             </div>
+                                        </td>                   
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <p class="text-black dark:text-white">{{ $account->account_name }}</p>
+                                        </td>
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <p class="text-black dark:text-white">{{ $account->brand }}</p>
+                                        </td>
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <p class="text-black dark:text-white">Rp {{ number_format($account->calculate_balance(), 0, ',', '.') }}</p>
+                                        </td>                                        
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <p class="text-black dark:text-white">{{ $account->account_type }}</p>
                                         </td>
                                     </tr>
                                 @empty
