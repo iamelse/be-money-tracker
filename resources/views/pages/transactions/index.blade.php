@@ -79,7 +79,6 @@
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Amount</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Category</th>
                                     <th class="min-w-[250px] px-4 py-4 font-medium text-black dark:text-white">Description</th>
-                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

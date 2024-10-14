@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('brand');
-            $table->string('account_name');
-            $table->string('account_type');
-            $table->bigInteger('balance');
+            $table->foreignId('user_id')->constrained('users')->nullable();
+            $table->string('brand')->nullable();
+            $table->string('account_name')->nullable();
+            $table->string('account_type')->nullable();
+            $table->bigInteger('balance')->nullable();
             $table->timestamps();
         });
     }

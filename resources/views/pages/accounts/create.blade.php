@@ -60,18 +60,6 @@
                         @endif
                     </div>
 
-                    <div class="mb-4.5">
-                        <label class="mb-3 block text-sm font-medium text-black dark:text-white">
-                            Balance <span class="text-meta-1">*</span>
-                        </label>
-                        <input type="text" id="balance" placeholder="Enter balance" 
-                               class="w-full rounded border-[1.5px] {{ $errors->has('balance') ? 'border-danger' : 'border-stroke' }} bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" 
-                               name="balance" value="{{ old('balance') }}" required />
-                        @if ($errors->has('balance'))
-                            <span class="text-danger text-sm">{{ $errors->first('balance') }}</span>
-                        @endif
-                    </div>
-
                     <button class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                         Create Account
                     </button>

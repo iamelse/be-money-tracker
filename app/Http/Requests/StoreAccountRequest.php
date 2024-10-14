@@ -26,7 +26,7 @@ class StoreAccountRequest extends FormRequest
             'account_name' => 'required|string|max:255',
             'brand' => 'required|string|max:255',
             'account_type' => 'required|string|in:checking,savings,credit',
-            'balance' => 'required|integer|min:0',
+            'balance' => 'nullable|integer|min:0',
         ];
     }
 

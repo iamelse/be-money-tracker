@@ -58,6 +58,8 @@ class AccountController extends Controller
 
     public function edit(Account $account) : View
     {
+        return abort(404);
+        /*
         $account_types = ['savings', 'credit', 'investment'];
         $brands = ['BNI', 'BCA', 'BSI', 'DANA', 'BRI', 'OVO'];
 
@@ -67,10 +69,13 @@ class AccountController extends Controller
             'account_types' => $account_types,
             'brands' => $brands
         ]);
+        */
     }
 
     public function update(UpdateAccountRequest $request, Account $account) : RedirectResponse
     {
+        return abort(404);
+        /*
         $account->update([
             'user_id' => Auth::user()->id,
             'brand' => $request->brand,
@@ -80,6 +85,7 @@ class AccountController extends Controller
         ]);
 
         return redirect()->route('web.app.accounts.edit', $account->id)->withToastSuccess('Account updated successfully!');
+        */
     }
 
     public function destroy(Account $account) : RedirectResponse 

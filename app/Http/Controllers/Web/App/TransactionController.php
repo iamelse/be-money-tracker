@@ -9,6 +9,8 @@ use App\Models\Account;
 use App\Models\LedgerEntry;
 use App\Models\Transaction;
 use App\Services\TransactionService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +24,7 @@ class TransactionController extends Controller
         $this->transactionService = $transactionService;
     }
     
-    public function index(Request $request)
+    public function index(Request $request) : View
     {
         $filters = [
             'q' => $request->input('q', ''),
@@ -42,7 +44,7 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function create()
+    public function create() : View
     {
         $accounts = Account::where('user_id', Auth::user()->id)->get();
 
@@ -52,7 +54,7 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function store(StoreTransactionRequest $request)
+    public function store(StoreTransactionRequest $request) : RedirectResponse
     {
         try {
             $this->transactionService->createTransaction([
@@ -60,6 +62,7 @@ class TransactionController extends Controller
                 'account_id' => $request->account_id,
                 'amount' => $request->amount,
                 'transaction_date' => $request->transaction_date,
+                'transaction_type' => $request->amount >= 0 ? 'credit' : 'debit',
                 'category' => $request->category,
                 'description' => $request->description,
             ]);
@@ -70,7 +73,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function edit(Transaction $transaction)
+    public function edit(Transaction $transaction) : View
     {
         $transaction = Transaction::findOrFail($transaction->id);
         $accounts = Account::where('user_id', Auth::user()->id)->get();
@@ -82,20 +85,20 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function update(UpdateTransactionRequest $request, Transaction $transaction)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction) : RedirectResponse
     {
         try {
-            $oldTransaction = Transaction::findOrFail($transaction->id);
+            $transaction = Transaction::findOrFail($transaction->id);
 
-            DB::transaction(function () use ($request, $oldTransaction) {
-                $oldTransaction->update($request->validated());
-
-                $this->_updateAccountBalance($oldTransaction->account_id);
-                
-                $newAmount = $request->amount;
-                $oldTransaction->transaction_type = $newAmount >= 0 ? 'credit' : 'debit';
-                $oldTransaction->save();
-            });
+            $this->transactionService->updateTransaction([
+                'user_id' => Auth::user()->id,
+                'account_id' => $request->account_id,
+                'amount' => $request->amount,
+                'transaction_date' => $request->transaction_date,
+                'transaction_type' => $request->amount >= 0 ? 'credit' : 'debit',
+                'category' => $request->category,
+                'description' => $request->description,
+            ], $transaction->id);
 
             return redirect()->route('web.app.transactions.index')->withToastSuccess('Transaction updated successfully.');
         } catch (\Throwable $th) {
@@ -103,7 +106,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function destroy(Transaction $transaction)
+    public function destroy(Transaction $transaction) : RedirectResponse
     {
         $transactionService = new TransactionService();
 

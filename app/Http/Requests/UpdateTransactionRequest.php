@@ -26,6 +26,7 @@ class UpdateTransactionRequest extends FormRequest
             'account_id' => 'required|exists:accounts,id',
             'amount' => 'required|integer',
             'transaction_date' => 'required|date',
+            'transaction_type' => 'sometimes',
             'category' => 'required|string',
             'description' => 'required|string',
         ];

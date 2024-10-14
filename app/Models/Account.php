@@ -43,11 +43,6 @@ class Account extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function ledger_entries()
-    {
-        return $this->hasMany(LedgerEntry::class);
-    }
-
     public function calculate_balance()
     {
         $totalCredits = $this->transactions()->where('amount', '>', 0)->sum('amount');
