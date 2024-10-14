@@ -47,4 +47,13 @@ class Account extends Model
     {
         return $this->hasMany(LedgerEntry::class);
     }
+
+    public function calculate_balance()
+    {
+        $totalCredits = $this->transactions()->where('amount', '>', 0)->sum('amount');
+
+        $totalDebits = $this->transactions()->where('amount', '<', 0)->sum('amount');
+
+        return $totalCredits + $totalDebits;
+    }
 }

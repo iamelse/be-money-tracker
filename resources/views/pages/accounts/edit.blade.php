@@ -67,7 +67,7 @@
                         </label>
                         <input type="text" id="balance" placeholder="Enter balance" 
                                class="w-full rounded border-[1.5px] {{ $errors->has('balance') ? 'border-danger' : 'border-stroke' }} bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" 
-                               name="balance" value="{{ old('balance', $account->balance) }}" required />
+                               name="balance" value="{{ old('balance', $account->calculate_balance()) }}" required />
                         @if ($errors->has('balance'))
                             <span class="text-danger text-sm">{{ $errors->first('balance') }}</span>
                         @endif

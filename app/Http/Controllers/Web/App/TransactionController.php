@@ -70,7 +70,6 @@ class TransactionController extends Controller
         }
     }
 
-    /*
     public function edit(Transaction $transaction)
     {
         $transaction = Transaction::findOrFail($transaction->id);
@@ -83,30 +82,26 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function update(UpdateTransactionRequest $request, $id)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
         try {
-            $transaction = Transaction::findOrFail($id);
-            $ledgerEntry = LedgerEntry::where('transaction_id', $id)->firstOrFail();
+            $oldTransaction = Transaction::findOrFail($transaction->id);
 
-            $balanceChange = $request->amount - $transaction->amount;
+            DB::transaction(function () use ($request, $oldTransaction) {
+                $oldTransaction->update($request->validated());
 
-            $this->transactionService->updateTransaction([
-                'user_id' => Auth::user()->id,
-                'account_id' => $request->account_id,
-                'amount' => $request->amount,
-                'transaction_date' => $request->transaction_date,
-                'category' => $request->category,
-                'description' => $request->description,
-                'ledger_id' => $ledgerEntry->id,
-            ], $transaction->id);
+                $this->_updateAccountBalance($oldTransaction->account_id);
+                
+                $newAmount = $request->amount;
+                $oldTransaction->transaction_type = $newAmount >= 0 ? 'credit' : 'debit';
+                $oldTransaction->save();
+            });
 
             return redirect()->route('web.app.transactions.index')->withToastSuccess('Transaction updated successfully.');
         } catch (\Throwable $th) {
-            return redirect()->route('web.app.transactions.edit', $id)->withToastError($th->getMessage());
+            return redirect()->route('web.app.transactions.edit', $transaction->id)->withToastError($th->getMessage());
         }
     }
-    */
 
     public function destroy(Transaction $transaction)
     {
@@ -126,5 +121,13 @@ class TransactionController extends Controller
             ->with('account')
             ->whereIn('account_id', Auth::user()->accounts()->pluck('id'))
             ->filter($filters);
+    }
+
+    private function _updateAccountBalance(Account $account)
+    {
+        $account = Account::findOrFail($account->id);
+        $balance = $account->calculate_balance();
+        $account->balance = $balance;
+        $account->save();
     }
 }

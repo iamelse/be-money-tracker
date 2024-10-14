@@ -21,6 +21,7 @@ class TransactionFactory extends Factory
         return [
             'user_id' => User::factory(),
             'account_id' => Account::factory(),
+            'transaction_type' => $this->faker->randomElement(['debit', 'credit']),
             'amount' => $this->faker->numberBetween(10000, 200000),
             'transaction_date' => $this->faker->date(),
             'category' => $this->faker->word,

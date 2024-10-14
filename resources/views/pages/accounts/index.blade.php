@@ -91,7 +91,7 @@
                                             <p class="text-black dark:text-white">{{ $account->brand }}</p>
                                         </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">Rp {{ number_format($account->balance, 0, ',', '.') }}</p>
+                                            <p class="text-black dark:text-white">Rp {{ number_format($account->calculate_balance(), 0, ',', '.') }}</p>
                                         </td>                                        
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ $account->account_type }}</p>

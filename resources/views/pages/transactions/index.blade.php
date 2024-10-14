@@ -106,11 +106,9 @@
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <div class="flex items-center space-x-3.5">
                                                 <!-- Edit Item Link -->
-                                                <!--
-                                                <a href="" class="hover:text-primary">
+                                                <a href="{{ route('web.app.transactions.edit', $transaction) }}" class="hover:text-primary">
                                                     <i class='bx bx-edit'></i>
                                                 </a>
-                                                -->
                                                 
                                                 <!-- Delete Item -->
                                                 <form action="{{ route('web.app.transactions.destroy', $transaction->id) }}" method="POST" id="delete-form-{{ $transaction->id }}" style="display: inline;">
