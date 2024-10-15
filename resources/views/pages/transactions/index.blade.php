@@ -74,8 +74,9 @@
                                 <tr class="bg-gray-2 text-left dark:bg-meta-4">
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                     <th class="min-w-[180px] px-4 py-4 font-medium text-black dark:text-white">Transaction Date</th>
-                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account</th>
+                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account Holder</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account Brand</th>
+                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Transaction Type</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Amount</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Category</th>
                                     <th class="min-w-[250px] px-4 py-4 font-medium text-black dark:text-white">Description</th>
@@ -111,7 +112,14 @@
                                             <p class="text-black dark:text-white">{{ $transaction->account->brand }}</p>
                                         </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">Rp {{ number_format($transaction->amount, 0, ',', '.') }}</p>
+                                            <p
+                                              class="inline-flex rounded-full {{ $transaction->transaction_type ==  "credit" ? 'bg-success' : 'bg-danger' }} bg-opacity-10 px-3 py-1 text-sm font-medium {{ $transaction->transaction_type ==  "credit" ? 'text-success' : 'text-danger' }}"
+                                            >
+                                              {{ Str::ucfirst($transaction->transaction_type) }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <p class="{{ $transaction->amount > 0 ? 'text-success' : 'text-danger' }} font-medium">Rp {{ number_format($transaction->amount, 0, ',', '.') }}</p>
                                         </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ $transaction->category }}</p>
