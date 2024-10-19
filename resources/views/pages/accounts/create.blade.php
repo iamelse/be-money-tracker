@@ -46,6 +46,18 @@
 
                     <div class="mb-4.5">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
+                            Account Number <span class="text-meta-1">*</span>
+                        </label>
+                        <input type="text" placeholder="Enter account number" 
+                               class="w-full rounded border-[1.5px] {{ $errors->has('account_number') ? 'border-danger' : 'border-stroke' }} bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" 
+                               name="account_number" value="{{ old('account_number') }}" required />
+                        @if ($errors->has('account_number'))
+                            <span class="text-danger text-sm">{{ $errors->first('account_number') }}</span>
+                        @endif
+                    </div>
+
+                    <div class="mb-4.5">
+                        <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             Account Type <span class="text-meta-1">*</span>
                         </label>
                         <select name="account_type" 

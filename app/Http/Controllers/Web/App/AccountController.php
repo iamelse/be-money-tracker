@@ -48,6 +48,7 @@ class AccountController extends Controller
         $account = Account::create([
             'user_id' => Auth::user()->id,
             'brand' => $request->brand,
+            'account_number' => $request->account_number,
             'account_name' => $request->account_name,
             'account_type' => $request->account_type,
             'balance' => $request->balance,

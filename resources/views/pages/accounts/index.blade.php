@@ -77,31 +77,26 @@
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Actions</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Account Name</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Brand</th>
+                                    <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Number</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Balance</th>
                                     <th class="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">Type</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($accounts as $account)
-                                    <tr>          
+                                    <tr>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <div class="flex items-center space-x-3.5">
-                                                <!-- Edit Item
-                                                <a href="{{ route('web.app.accounts.edit', $account->id) }}" class="hover:text-primary">
-                                                    <i class='bx bx-edit'></i>
-                                                </a>
-                                                -->
-                                        
                                                 <!-- Delete Item -->
                                                 <form action="{{ route('web.app.accounts.destroy', $account->id) }}" method="POST" id="delete-form-{{ $account->id }}" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" class="hover:text-primary" onclick="confirmDelete({{ $account->id }})">
-                                                        <i class='bx bx-trash'></i> <!-- Delete icon -->
+                                                        <i class='bx bx-trash'></i>
                                                     </button>
                                                 </form>
                                             </div>
-                                        </td>                   
+                                        </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ $account->account_name }}</p>
                                         </td>
@@ -109,8 +104,17 @@
                                             <p class="text-black dark:text-white">{{ $account->brand }}</p>
                                         </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                            <p class="text-black dark:text-white">Rp {{ number_format($account->calculate_balance(), 0, ',', '.') }}</p>
-                                        </td>                                        
+                                            <p class="text-black dark:text-white">{{ $account->account_number }}</p>
+                                        </td>
+                                        <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                                            <!-- Inline Balance and Toggle Button -->
+                                            <span class="flex items-center">
+                                                <span id="balance-{{ $account->id }}" class="text-black dark:text-white">*****</span>
+                                                <button onclick="toggleBalance({{ $account->id }}, {{ $account->calculate_balance() }})" class="ml-2 hover:text-blue-700">
+                                                    <i id="toggle-icon-{{ $account->id }}" class='bx bx-show'></i>
+                                                </button>
+                                            </span>
+                                        </td>
                                         <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                             <p class="text-black dark:text-white">{{ $account->account_type }}</p>
                                         </td>
@@ -122,9 +126,9 @@
                                         </td>
                                     </tr>
                                 @endforelse
-                            </tbody>                            
+                            </tbody>
                         </table>
-                    </div>
+                    </div>                                        
 
                     <!-- ====== Pagination Start ===== -->
                     <div class="flex justify-between items-center p-4 sm:p-6 xl:p-7.5">
@@ -215,6 +219,28 @@
                 document.getElementById('delete-form-' + itemId).submit();
             }
         });
+    }
+</script>
+
+<script>
+    function toggleBalance(accountId, balance) {
+        const balanceElement = document.getElementById('balance-' + accountId);
+        const iconElement = document.getElementById('toggle-icon-' + accountId);
+        const currentText = balanceElement.textContent;
+
+        if (currentText.includes('*****')) {
+            // Show the actual balance
+            balanceElement.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(balance);
+            // Switch icon to 'bx-hide'
+            iconElement.classList.remove('bx-show');
+            iconElement.classList.add('bx-hide');
+        } else {
+            // Hide the balance with *****
+            balanceElement.textContent = '*****';
+            // Switch icon to 'bx-show'
+            iconElement.classList.remove('bx-hide');
+            iconElement.classList.add('bx-show');
+        }
     }
 </script>
 @endpush

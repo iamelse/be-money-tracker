@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->nullable();
             $table->string('brand')->nullable();
+            $table->string('account_number');
             $table->string('account_name')->nullable();
             $table->string('account_type')->nullable();
             $table->bigInteger('balance')->nullable();

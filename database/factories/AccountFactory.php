@@ -20,6 +20,7 @@ class AccountFactory extends Factory
         return [
             'user_id' => User::factory(),
             'brand' => $this->faker->randomElement(['BNI', 'BCA', 'BSI', 'DANA', 'BRI', 'OVO']),
+            'account_number' => $this->faker->bankAccountNumber,
             'account_name' => $this->faker->company,
             'account_type' => $this->faker->randomElement(['checking', 'savings', 'credit']),
             'balance' => $this->faker->numberBetween(10000, 10000000),
