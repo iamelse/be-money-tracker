@@ -6,14 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Account;
-use App\Models\LedgerEntry;
 use App\Models\Transaction;
 use App\Services\TransactionService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -30,17 +28,19 @@ class TransactionController extends Controller
             'q' => $request->input('q', ''),
             'perPage' => $request->input('limit', 10),
             'account_id' => $request->input('account_id', null),
+            'transaction_type' => $request->input('transaction_type', null),
+            'start_date' => $request->input('start_date', null),
+            'end_date' => $request->input('end_date', null),
             'columns' => ['amount', 'category', 'description']
         ];
 
         $transactions = $this->_getFilteredTransactions($filters);
+        $accounts = Account::where('user_id', Auth::user()->id)->get();
 
         return view('pages.transactions.index', [
             'title' => 'Your Transactions | CashFlow',
             'transactions' => $transactions,
-            'perPage' => $filters['perPage'],
-            'q' => $filters['q'],
-            'account_id' => $filters['account_id'],
+            'accounts' => $accounts
         ]);
     }
 
@@ -57,12 +57,16 @@ class TransactionController extends Controller
     public function store(StoreTransactionRequest $request) : RedirectResponse
     {
         try {
+            $amount = abs($request->amount);
+
+            $transactionType = $request->amount >= 0 ? 'credit' : 'debit';
+
             $this->transactionService->createTransaction([
                 'user_id' => Auth::user()->id,
                 'account_id' => $request->account_id,
-                'amount' => $request->amount,
+                'amount' => $amount,
                 'transaction_date' => $request->transaction_date,
-                'transaction_type' => $request->amount >= 0 ? 'credit' : 'debit',
+                'transaction_type' => $transactionType,
                 'category' => $request->category,
                 'description' => $request->description,
             ]);
@@ -90,12 +94,16 @@ class TransactionController extends Controller
         try {
             $transaction = Transaction::findOrFail($transaction->id);
 
+            $amount = abs($request->amount);
+
+            $transactionType = $request->amount >= 0 ? 'credit' : 'debit';
+
             $this->transactionService->updateTransaction([
                 'user_id' => Auth::user()->id,
                 'account_id' => $request->account_id,
-                'amount' => $request->amount,
+                'amount' => $amount,
                 'transaction_date' => $request->transaction_date,
-                'transaction_type' => $request->amount >= 0 ? 'credit' : 'debit',
+                'transaction_type' => $transactionType,
                 'category' => $request->category,
                 'description' => $request->description,
             ], $transaction->id);
@@ -124,13 +132,5 @@ class TransactionController extends Controller
             ->with('account')
             ->whereIn('account_id', Auth::user()->accounts()->pluck('id'))
             ->filter($filters);
-    }
-
-    private function _updateAccountBalance(Account $account)
-    {
-        $account = Account::findOrFail($account->id);
-        $balance = $account->calculate_balance();
-        $account->balance = $balance;
-        $account->save();
     }
 }

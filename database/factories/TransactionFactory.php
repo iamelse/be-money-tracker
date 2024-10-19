@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Account;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -27,5 +28,22 @@ class TransactionFactory extends Factory
             'category' => $this->faker->word,
             'description' => $this->faker->sentence,
         ];
+    }
+
+    /**
+     * State to mock transactions for the authenticated user.
+     */
+    public function forAuthenticatedUser()
+    {
+        return $this->state(function () {
+            $user = Auth::user();
+            // Get the user's account IDs
+            $accountIds = $user->accounts()->pluck('id');
+
+            return [
+                'user_id' => $user->id,
+                'account_id' => $this->faker->randomElement($accountIds),
+            ];
+        });
     }
 }
