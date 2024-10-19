@@ -45,8 +45,8 @@ class Account extends Model
 
     public function calculate_balance()
     {
-        $totalCredits = $this->transactions()->where('transaction_type', 'credit')->sum('amount');
-        $totalDebits = $this->transactions()->where('transaction_type', 'debit')->sum('amount');
+        $totalCredits = $this->transactions()->sum('credit');
+        $totalDebits = $this->transactions()->sum('debit');
 
         return $totalCredits - $totalDebits;
     }

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('account_id')->nullable()->constrained('accounts')->nullOnDelete();
             $table->string('transaction_type')->nullable();
-            $table->bigInteger('amount');
+            $table->bigInteger('debit')->default(0);
+            $table->bigInteger('credit')->default(0);
             $table->date('transaction_date');
             $table->string('category');
             $table->string('description')->nullable();

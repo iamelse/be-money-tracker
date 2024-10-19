@@ -31,6 +31,8 @@ class TransactionController extends Controller
             'transaction_type' => $request->input('transaction_type', null),
             'start_date' => $request->input('start_date', null),
             'end_date' => $request->input('end_date', null),
+            'order_by' => $request->input('order_by', 'transaction_date'),
+            'order_direction' => $request->input('order_direction', 'desc'),
             'columns' => ['amount', 'category', 'description']
         ];
 
@@ -61,10 +63,14 @@ class TransactionController extends Controller
 
             $transactionType = $request->amount >= 0 ? 'credit' : 'debit';
 
+            $debit = $transactionType === 'debit' ? -$amount : 0;
+            $credit = $transactionType === 'credit' ? $amount : 0;
+
             $this->transactionService->createTransaction([
                 'user_id' => Auth::user()->id,
                 'account_id' => $request->account_id,
-                'amount' => $amount,
+                'debit' => $debit,
+                'credit' => $credit,
                 'transaction_date' => $request->transaction_date,
                 'transaction_type' => $transactionType,
                 'category' => $request->category,
@@ -94,14 +100,16 @@ class TransactionController extends Controller
         try {
             $transaction = Transaction::findOrFail($transaction->id);
 
-            $amount = abs($request->amount);
+            $debit = $request->amount < 0 ? abs($request->amount) : 0;
+            $credit = $request->amount >= 0 ? $request->amount : 0;
 
-            $transactionType = $request->amount >= 0 ? 'credit' : 'debit';
+            $transactionType = $credit > 0 ? 'credit' : 'debit';
 
             $this->transactionService->updateTransaction([
                 'user_id' => Auth::user()->id,
                 'account_id' => $request->account_id,
-                'amount' => $amount,
+                'debit' => $debit,
+                'credit' => $credit,
                 'transaction_date' => $request->transaction_date,
                 'transaction_type' => $transactionType,
                 'category' => $request->category,

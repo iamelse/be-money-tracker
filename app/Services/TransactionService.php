@@ -11,15 +11,20 @@ class TransactionService
     public function createTransaction(array $data)
     {
         DB::transaction(function () use ($data) {
-            $account = Account::findOrFail($data['account_id']);
-            $amount = $data['amount'];
             
-            $newBalance = $account->balance + $amount;
+            $account = Account::findOrFail($data['account_id']);
+
+            $debit = $data['debit'] ?? 0;
+            $credit = $data['credit'] ?? 0;
+            $balanceChange = $credit - $debit;
+
+            $newBalance = $account->balance + $balanceChange;
 
             $transaction = Transaction::create([
                 'user_id' => $data['user_id'],
                 'account_id' => $data['account_id'],
-                'amount' => $amount,
+                'debit' => $debit,
+                'credit' => $credit,
                 'transaction_date' => $data['transaction_date'],
                 'transaction_type' => $data['transaction_type'],
                 'category' => $data['category'],
@@ -33,21 +38,30 @@ class TransactionService
     public function updateTransaction(array $data, $transactionId)
     {
         DB::transaction(function () use ($data, $transactionId) {
+
             $transaction = Transaction::findOrFail($transactionId);
             $account = Account::findOrFail($data['account_id']);
-            
+
+            $oldAmount = $transaction->credit > 0 ? $transaction->credit : -$transaction->debit;
+            $newBalance = $account->balance - $oldAmount;
+
+            $debit = $data['debit'];
+            $credit = $data['credit'];
+
+            $newAmount = $credit > 0 ? $credit : -$debit;
+            $newBalance += $newAmount;
+
             $transaction->update([
                 'account_id' => $data['account_id'],
-                'amount' => $data['amount'],
+                'debit' => $debit,
+                'credit' => $credit,
                 'transaction_date' => $data['transaction_date'],
                 'transaction_type' => $data['transaction_type'],
                 'category' => $data['category'],
                 'description' => $data['description'],
             ]);
 
-            $transaction->refresh();
-            $account->refresh();
-            $account->update(['balance' => $account->balance]);
+            $account->update(['balance' => $newBalance]);
         });
     }
 

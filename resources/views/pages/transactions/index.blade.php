@@ -75,6 +75,28 @@
                                 <option value="credit" {{ request('transaction_type') == 'credit' ? 'selected' : '' }}>Credit</option>
                             </select>
                         </div>
+
+                        <!-- Sorting Filter -->
+                        <div class="mb-4 w-full lg:mb-0">
+                            <label for="order_by" class="sr-only">Order By</label>
+                            <select id="order_by" name="order_by"
+                                    class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 pl-5 pr-12 outline-none transition focus:border-primary dark:border-strokedark dark:bg-form-input dark:text-white">
+                                <option value="">Order By</option>
+                                <option value="transaction_date" {{ request('order_by') == 'transaction_date' ? 'selected' : '' }}>Date</option>
+                                <option value="credit" {{ request('order_by') == 'credit' ? 'selected' : '' }}>Credit</option>
+                                <option value="debit" {{ request('order_by') == 'debit' ? 'selected' : '' }}>Debit</option>
+                            </select>
+                        </div>
+
+                        <!-- Sorting Direction -->
+                        <div class="mb-4 w-full lg:mb-0">
+                            <label for="order_direction" class="sr-only">Order Direction</label>
+                            <select id="order_direction" name="order_direction"
+                                    class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 pl-5 pr-12 outline-none transition focus:border-primary dark:border-strokedark dark:bg-form-input dark:text-white">
+                                <option value="asc" {{ request('order_direction') == 'asc' ? 'selected' : '' }}>Ascending</option>
+                                <option value="desc" {{ request('order_direction') == 'desc' ? 'selected' : '' }}>Descending</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Submit and Clear Buttons -->
@@ -173,16 +195,16 @@
                                                 <p class="text-black dark:text-white">{{ $transaction->category }}</p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->transaction_type == 'credit' ? 'text-success' : 'text-danger' }}">
-                                                    @if($transaction->transaction_type == 'credit')
-                                                        {{ 'Rp.' . number_format($transaction->amount, 0, ',', '.') }}
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->credit ? 'text-success' : 'text-danger' }}">
+                                                    @if($transaction->credit)
+                                                        {{ 'Rp.' . number_format($transaction->credit, 0, ',', '.') }}
                                                     @endif
                                                 </p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->transaction_type == 'debit' ? 'text-danger' : 'text-success' }}">
-                                                    @if($transaction->transaction_type == 'debit')
-                                                        {{ 'Rp.' . number_format($transaction->amount, 0, ',', '.') }}
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->debit ? 'text-danger' : 'text-success' }}">
+                                                    @if($transaction->debit)
+                                                        {{ 'Rp.' . number_format($transaction->debit, 0, ',', '.') }}
                                                     @endif
                                                 </p>
                                             </td>

@@ -19,11 +19,14 @@ class TransactionFactory extends Factory
      */
     public function definition(): array
     {
+        $transactionType = $this->faker->randomElement(['debit', 'credit']);
+        
         return [
             'user_id' => User::factory(),
             'account_id' => Account::factory(),
-            'transaction_type' => $this->faker->randomElement(['debit', 'credit']),
-            'amount' => $this->faker->numberBetween(10000, 200000),
+            'transaction_type' => $transactionType,
+            'debit' => $transactionType === 'debit' ? $this->faker->numberBetween(10000, 200000) : 0,
+            'credit' => $transactionType === 'credit' ? $this->faker->numberBetween(10000, 200000) : 0,
             'transaction_date' => $this->faker->date(),
             'category' => $this->faker->word,
             'description' => $this->faker->sentence,

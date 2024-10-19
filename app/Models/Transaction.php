@@ -23,6 +23,8 @@ class Transaction extends Model
         $start_date = $filters['start_date'] ?? null;
         $end_date = $filters['end_date'] ?? null;
         $transaction_type = $filters['transaction_type'] ?? null;
+        $order_by = $filters['order_by'] ?? 'transaction_date';
+        $order_direction = $filters['order_direction'] ?? 'desc';
 
         return $query->with('account')
             ->when($account_id, function ($query) use ($account_id) {
@@ -44,7 +46,7 @@ class Transaction extends Model
             ->when($end_date, function ($query) use ($end_date) {
                 $query->whereDate('transaction_date', '<=', $end_date);
             })
-            ->latest('transaction_date')
+            ->orderBy($order_by, $order_direction)
             ->paginate($perPage);
     }
 

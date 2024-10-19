@@ -41,11 +41,11 @@
                         </label>
                         <input type="text" id="amount" placeholder="Enter amount" 
                                class="w-full rounded border-[1.5px] {{ $errors->has('amount') ? 'border-danger' : 'border-stroke' }} bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" 
-                               name="amount" value="{{ old('amount', $transaction->amount) }}" required />
+                               name="amount" value="{{ old('amount', $transaction->transaction_type === 'debit' ? $transaction->debit : $transaction->credit) }}" required />
                         @if ($errors->has('amount'))
                             <span class="text-danger text-sm">{{ $errors->first('amount') }}</span>
                         @endif
-                    </div>
+                    </div>                                             
 
                     <div class="mb-4.5">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
