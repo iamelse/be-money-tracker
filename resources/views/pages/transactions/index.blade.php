@@ -186,28 +186,24 @@
                                                 </div>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p class="text-black dark:text-white">{{ $transaction->account->account_name . ' - ' . $transaction->account->brand }}</p>
+                                                <p class="text-black dark:text-white">{{ $transaction->formatted_account }}</p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                                                <p class="text-black dark:text-white">{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('F j, Y') }}</p>
+                                                <p class="text-black dark:text-white">{{ $transaction->formatted_transaction_date }}</p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                                 <p class="text-black dark:text-white">{{ $transaction->category }}</p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->credit ? 'text-success' : 'text-danger' }}">
-                                                    @if($transaction->credit)
-                                                        {{ 'Rp.' . number_format($transaction->credit, 0, ',', '.') }}
-                                                    @endif
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->credit_class }}">
+                                                    {{ $transaction->formatted_credit }}
                                                 </p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->debit ? 'text-danger' : 'text-success' }}">
-                                                    @if($transaction->debit)
-                                                        {{ 'Rp.' . number_format($transaction->debit, 0, ',', '.') }}
-                                                    @endif
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->debit_class }}">
+                                                    {{ $transaction->formatted_debit }}
                                                 </p>
-                                            </td>
+                                            </td>                                            
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                                                 <p class="text-black dark:text-white">{{ $transaction->description }}</p>
                                             </td>

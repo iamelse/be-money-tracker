@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,6 +50,48 @@ class Transaction extends Model
             })
             ->orderBy($order_by, $order_direction)
             ->paginate($perPage);
+    }
+
+    protected function formattedAccount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "{$this->account->account_name} - {$this->account->brand}"
+        );
+    }
+
+    protected function formattedTransactionDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Carbon::parse($this->transaction_date)->format('F j, Y')
+        );
+    }
+
+    protected function formattedCredit(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->credit ? 'Rp.' . number_format($this->credit, 0, ',', '.') : null
+        );
+    }
+
+    protected function formattedDebit(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->debit ? 'Rp.' . number_format($this->debit, 0, ',', '.') : null
+        );
+    }
+
+    protected function creditClass(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->credit ? 'text-success' : 'text-danger'
+        );
+    }
+
+    protected function debitClass(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->debit ? 'text-danger' : 'text-success'
+        );
     }
 
     public function user(): BelongsTo
