@@ -59,7 +59,7 @@
                                 <option value="">Select Account</option>
                                 @foreach ($accounts as $account)
                                     <option value="{{ $account->id }}" {{ request('account_id') == $account->id ? 'selected' : '' }}>
-                                        {{ $account->brand . ' - ' . $account->account_name }}
+                                        {{ $account->formatted_account }}
                                     </option>
                                 @endforeach
                             </select>
@@ -195,12 +195,12 @@
                                                 <p class="text-black dark:text-white">{{ $transaction->category }}</p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->credit_class }}">
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium text-success">
                                                     {{ $transaction->formatted_credit }}
                                                 </p>
                                             </td>
                                             <td class="border-b border-[#eee] px-4 py-5 dark:border-strokedark" style="text-align: right;">
-                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium {{ $transaction->debit_class }}">
+                                                <p class="inline-flex rounded-full bg-opacity-10 px-3 py-1 font-medium text-danger">
                                                     {{ $transaction->formatted_debit }}
                                                 </p>
                                             </td>                                            

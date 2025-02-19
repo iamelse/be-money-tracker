@@ -55,7 +55,7 @@ class Transaction extends Model
     protected function formattedAccount(): Attribute
     {
         return Attribute::make(
-            get: fn () => "{$this->account->account_name} - {$this->account->brand}"
+            get: fn () => "{$this->account->brand} - {$this->account->account_name}"
         );
     }
 
@@ -77,20 +77,6 @@ class Transaction extends Model
     {
         return Attribute::make(
             get: fn () => $this->debit ? 'Rp.' . number_format($this->debit, 0, ',', '.') : null
-        );
-    }
-
-    protected function creditClass(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->credit ? 'text-success' : 'text-danger'
-        );
-    }
-
-    protected function debitClass(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->debit ? 'text-danger' : 'text-success'
         );
     }
 

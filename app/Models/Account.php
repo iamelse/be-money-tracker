@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,13 @@ class Account extends Model
             })
             ->latest('created_at')
             ->paginate($perPage);
+    }
+
+    protected function formattedAccount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "{$this->brand} - {$this->account_name}"
+        );
     }
 
     public function user(): BelongsTo
