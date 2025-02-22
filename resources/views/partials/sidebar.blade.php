@@ -47,10 +47,10 @@
           @foreach ([
               ['icon' => 'bx-home-alt', 'label' => 'Dashboard', 'route' => route('web.app.dashboard')],
               ['icon' => 'bx-credit-card', 'label' => 'Transactions', 'route' => url('/transactions')],
-              ['icon' => 'bx-wallet', 'label' => 'Budgets', 'route' => url('/budgets')],
-              ['icon' => 'bx-pie-chart-alt-2', 'label' => 'Reports', 'route' => url('/reports')],
+              //['icon' => 'bx-wallet', 'label' => 'Budgets', 'route' => url('/budgets')],
+              //['icon' => 'bx-pie-chart-alt-2', 'label' => 'Reports', 'route' => url('/reports')],
               ['icon' => 'bx-building-house', 'label' => 'Accounts', 'route' => url('/accounts')],
-              ['icon' => 'bx-target-lock', 'label' => 'Goals', 'route' => url('/goals')],
+              ['icon' => 'bx-target-lock', 'label' => 'Goals', 'route' => url('/life-goals')],
             ] as $item)
             <li>
               <a

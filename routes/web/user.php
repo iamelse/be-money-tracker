@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\App\AccountController;
 use App\Http\Controllers\Web\App\DashboardController;
+use App\Http\Controllers\Web\App\LifeGoalController;
 use App\Http\Controllers\Web\App\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,10 @@ Route::middleware('costum.auth')->group(function () {
     Route::put('/transactions/{transaction}', [TransactionController::class, 'update'])->name('web.app.transactions.update');
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'destroy'])->name('web.app.transactions.destroy');
 
+    Route::get('/life-goals', [LifeGoalController::class, 'index'])->name('web.app.life.goals.index');
+    Route::get('/life-goals/create', [LifeGoalController::class, 'create'])->name('web.app.life.goals.create');
+    Route::post('/life-goals', [LifeGoalController::class, 'store'])->name('web.app.life.goals.store');
+    Route::get('/life-goals/{lifeGoal}/edit', [LifeGoalController::class, 'edit'])->name('web.app.life.goals.edit');
+    Route::put('/life-goals/{lifeGoal}', [LifeGoalController::class, 'update'])->name('web.app.life.goals.update');
+    Route::delete('/life-goals/{lifeGoal}', [LifeGoalController::class, 'destroy'])->name('web.app.life.goals.destroy');
 });

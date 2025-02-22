@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('goal_name');
-            $table->decimal('target_amount', 10, 2);
-            $table->decimal('current_amount', 10, 2);
+            $table->integer('target_amount');
+            $table->integer('current_amount')->default(0);
             $table->dateTime('deadline');
             $table->timestamps();
         });
